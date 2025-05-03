@@ -1,0 +1,38 @@
+.project
+spring-openapi-generator-test-app/HELP.md
+spring-openapi-generator-test-app/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+spring-openapi-generator-test-app/.apt_generated
+spring-openapi-generator-test-app/.classpath
+spring-openapi-generator-test-app/.factorypath
+spring-openapi-generator-test-app/.project
+spring-openapi-generator-test-app/.settings
+spring-openapi-generator-test-app/.springBeans
+spring-openapi-generator-test-app/.sts4-cache
+
+### maven ###
+spring-openapi-generator-test-app/mvnw
+spring-openapi-generator-test-app/mvnw.cmd
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
