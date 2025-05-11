@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: spring-openapi-generator-test-app
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false

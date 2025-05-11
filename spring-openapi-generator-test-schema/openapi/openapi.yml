@@ -1,0 +1,206 @@
+openapi: '3.0.3'
+info:
+  title: Sample API
+  description: Sample for understanding OpenAPI usage.
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+    description: Sample_server_v1
+  - url: https://api.server.test/v2
+    description: Sample_server_v2
+paths:
+  /books:
+    post:
+      tags:
+        - books
+      operationId: createBook
+      summary: create_book
+      description: Create book.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput' # POST時はID不要なので入力用スキーマを分けるのも良い
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+    get:
+      tags:
+        - books
+      operationId: getBooks
+      summary: get_books
+      description: Get Books.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+  /books/{bookId}:
+    get:
+      tags:
+        - books
+      operationId: getBookById
+      summary: get_book
+      description: Get Book.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: The specified bookId is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+        '404':
+          description: A book with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+    put:
+      tags:
+        - books
+      operationId: updateBook
+      summary: update_book
+      description: Update Book.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput' # 更新時もID以外を受け取る
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: The specified bookId is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+        '404':
+          description: A book with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+    delete:
+      tags:
+        - books
+      operationId: deleteBook
+      summary: delete_book
+      description: Delete Book.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book' # 削除成功時に削除した情報を返すかはAPI設計による
+        '404':
+          description: A book with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # エラーレスポンススキーマを定義するとより良い
+    parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string # IDは文字列の場合もあり
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        bookId:
+          type: string
+          description: 本のID
+          readOnly: true # APIが生成するので読み取り専用
+        title:
+          type: string
+          description: 本のタイトル
+        author:
+          type: string
+          description: 著者
+        isbn:
+          type: string # ISBNは文字列として扱う方が一般的
+          description: ISBN
+      required:
+        - title
+        - author
+        - isbn
+    BookInput: # POST/PUT時の入力用スキーマ（IDは不要）
+      type: object
+      properties:
+        title:
+          type: string
+          description: 本のタイトル
+        author:
+          type: string
+          description: 著者
+        isbn:
+          type: string # ISBNは文字列として扱う方が一般的
+          description: ISBN
+      required:
+        - title
+        - author
+        - isbn
+    Error: # エラーレスポンスのスキーマ例
+      type: object
+      properties:
+        code:
+          type: integer
+          description: エラーコード
+        message:
+          type: string
+          description: エラーメッセージ
